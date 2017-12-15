@@ -1,44 +1,52 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using ClbcRestService.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClbcRestService.Controllers
 {
     [Route("api/[controller]")]
-    public class ValuesController : Controller
+    public class VendorsController : Controller
     {
-        // GET api/values
+        private readonly List<Vendor> _vendors;
+
+        public VendorsController()
+        {
+            const int numberVendors = 10;
+            _vendors = CreateVendors(numberVendors);
+        }
+
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<Vendor> Get()
         {
-            return new string[] { "value1", "value2" };
+            return _vendors;
         }
 
-        // GET api/values/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public Vendor Get(int id)
         {
-            return "value";
+            return _vendors[id];
         }
 
-        // POST api/values
-        //[HttpPost]
-        //public void Post([FromBody]string value)
-        //{
-        //}
+        private static List<Vendor> CreateVendors(int numberVendors)
+        {
+            List<Vendor> vendors = new List<Vendor>();
 
-        //// PUT api/values/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody]string value)
-        //{
-        //}
+            for (int n = 1; n <= numberVendors; n++)
+            {
+                Vendor vendor = new Vendor
+                {
+                    VendorId = n,
+                    Name = $"Vendor Name { n}",
+                    OcgNumber = $"OCG Number { n} ",
+                    ManagingQsArea = $"Managing QS Area { n}",
+                    PrimaryAddress = $"Primary Address { n}"
+                };
 
-        //// DELETE api/values/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
+                vendors.Add(vendor);
+            }
+
+            return vendors;
+        }
     }
 }
