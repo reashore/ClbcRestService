@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Cors;
 
 namespace ClbcRestService
 {
@@ -16,6 +17,7 @@ namespace ClbcRestService
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
             services.AddMvc();
         }
 
@@ -25,6 +27,11 @@ namespace ClbcRestService
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            // the corsUrl must be specified without a trailing slash. 
+            // See: https://docs.microsoft.com/en-us/aspnet/core/security/cors
+            const string corsUrl = "http://localhost:3000";
+            app.UseCors(options => options.WithOrigins(corsUrl).AllowAnyMethod());
 
             app.UseMvc();
         }

@@ -9,11 +9,11 @@ namespace ClbcRestService.Controllers
     public class VendorsController : Controller
     {
         private readonly List<Vendor> _vendors;
+        private const int NumberVendors = 9;
 
         public VendorsController()
         {
-            const int numberVendors = 10;
-            _vendors = CreateVendors(numberVendors);
+            _vendors = CreateVendors(NumberVendors);
         }
 
         [HttpGet]
@@ -22,9 +22,14 @@ namespace ClbcRestService.Controllers
             return _vendors;
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public Vendor Get(int id)
         {
+            if (id < 1 || id > NumberVendors)
+            {
+                BadRequest($"Index is out of range: {id}");
+            }
+
             return _vendors[id];
         }
 
